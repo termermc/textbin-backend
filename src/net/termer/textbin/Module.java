@@ -373,12 +373,14 @@ public class Module implements TwineModule {
 								if(month > pMonth) {
 									day+=30;
 								}
-								if(day > pDay) {
-									hour+=24;
-								}
-								if(hour-pHour >= 24) {
+								if(day-pDay > 1) {
+									delete = true;
+								} else if(hour-pHour < 0) {
+									delete = true;
+								} else if(hour-pHour > 0) {
 									delete = true;
 								}
+								
 								if(delete) {
 									// Delete post
 									SQL.deletePost(post.getString("post_id"), res -> {
