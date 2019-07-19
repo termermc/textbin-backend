@@ -377,7 +377,9 @@ public class Module implements TwineModule {
 									delete = true;
 								} else if(hour-pHour < 0) {
 									delete = true;
-								} else if(hour-pHour > 0) {
+								} else if(day != pDay && hour-pHour > 0) {
+									delete = true;
+								} else if(hour-pHour > 23) {
 									delete = true;
 								}
 								
