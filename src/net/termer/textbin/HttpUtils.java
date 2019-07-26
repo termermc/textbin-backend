@@ -34,7 +34,7 @@ public class HttpUtils {
 	 */
 	public static String ip(RoutingContext r) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		byte[] ip = r.request().remoteAddress().host().getBytes("UTF-8");
-		MessageDigest md = MessageDigest.getInstance("MD5");
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		byte[] hashed = md.digest(ip);
 		
 		return new String(hashed, "UTF-8");
