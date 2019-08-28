@@ -14,4 +14,12 @@ public class TextBinConfig {
 	public int db_max_pool_size = 10;
 	public String domain = "textbin";
 	public int max_posts = 20;
+	public String frontend_host = "http://localhost:8080";
+	public String super_admin_username = "super";
+	public String super_admin_password = "drowssap";
+	public String trip_strategy = "classic";
+	public String trip_salt = "PleaseChangeMe";
+	public String ip_hash_algorithm = "SHA-256";
+	public String ip_hash_salt = "PleaseChangeMe";
+	public int site_stat_rank_required = 1;
 }
