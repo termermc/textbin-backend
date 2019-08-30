@@ -38,10 +38,23 @@ For routes requiring a logged in user, the following will be returned if the min
 ## Post Routes
 GET `/public_posts` - Fetches public posts organized by last bump (descending)
 
+* Minimum rank required: 0
+ * Output:
+    * posts (array)
+        * name (string) - Post name/title
+        * date (string) - Creation date in MM/DD/YYYY format
+        * time (string) - Creation time in HH:MM format
+        * category (int) - The ID of the category in which this post was created
+        * post_id (string) - The ten-character post ID
+        * category_code (string) - The 1-4 character code for the category this post is in
+        * category_name (string) - The name of the category this post is in
+        * comment_count (int) - The amount of comments on this post
+
 GET `/latest_posts` - Fetches public posts organized by latest (descending)
 
  * Minimum rank required: 0
  * Output:
+    * status (string) - The response status. success|error
     * posts (array)
         * name (string) - Post name/title
         * date (string) - Creation date in MM/DD/YYYY format
@@ -52,3 +65,31 @@ GET `/latest_posts` - Fetches public posts organized by latest (descending)
         * category_code (string) - The 1-4 character code for the category this post is in
         * category_name (string) - The name of the category this post is in
         * comment_count (int) - The amount of comments on this post
+
+GET `/get_post` - Gets info about a post
+
+    * Minimum rank required: 0
+    * Parameters:
+        * id (string) - The post's ten character ID
+    * Output:
+        * status (string) - The response status. success|error
+        * name (string) - The post name/title
+        * type (string) - The post type. plain|markdown|html
+        * text (string) - The post's content
+        * date (string) - Creation date in MM/DD/YYYY format
+        * time (string) - Creation time in HH:MM format
+        * sticky (int) - `1` if the post is sticky, `0` otherwise
+        * category (int) - The ID of the category in which this post was created
+        * category_name (string) - The name of the category this post is in
+        * category_code (string) - The 1-4 character code for the category this post is in
+
+POST `/post` - Creates a new post
+
+ * Minimum rank required: 0
+ * Parameters:
+     * text (string) - The post text content
+     * category (int) - The category ID for this post (-1 for private)
+     * name (string) - The post name/title
+     * type (string) - The post type. plain|markdown|html
+ * Output:
+    * status (string) - The response status. success|error
