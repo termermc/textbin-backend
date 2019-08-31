@@ -96,7 +96,7 @@ public class SQL {
 			"	) AS comment_count\n" + 
 			"FROM posts\n" + 
 			"JOIN categories ON posts.post_category = categories.id\n" + 
-			"WHERE post_category > -1 AND category_code "+(categoryCode==null?'!':"")+"= ?\n" +
+			"WHERE post_category > -1 AND category_code "+(categoryCode==null?"!= ? AND post_sticky < 1":"= ?")+"\n" +
 			"ORDER BY "+(categoryCode==null?"":"post_sticky DESC, ")+"post_bump DESC" + 
 			(limit > 0 ? "\nLIMIT "+limit : ""),
 			new JsonArray().add(categoryCode == null ? "" : categoryCode),
@@ -482,7 +482,7 @@ public class SQL {
 			"	) AS comment_count\n" + 
 			"	FROM posts\n" + 
 			"	JOIN categories ON posts.post_category = categories.id\n" + 
-			"	WHERE post_category > -1\n" + 
+			"	WHERE post_category > -1 AND post_sticky < 1\n" + 
 			"	ORDER BY posts.id DESC" + 
 			(limit > 0 ? "\nLIMIT "+limit : ""),
 			hdlr
