@@ -17,10 +17,23 @@ public class CommentsRoute implements Handler<RoutingContext> {
 		try {
 			String ip = HttpUtils.ip(r);
 			String postId = r.request().params().get("post_id");
+			
+			// Get limit and offset
+			int limit = 0;
+			int offset = 0;
+			try {
+				if(r.request().params().get("limit") != null)
+					limit = Integer.parseInt(r.request().params().get("limit"));
+				if(r.request().params().get("offset") != null)
+					offset = Integer.parseInt(r.request().params().get("offset"));
+			} catch(NumberFormatException e) {
+				// Simply exclude values
+			}
+			
 			if(postId == null) {
 				HttpUtils.apiError(r, "Invalid post ID");
 			} else {
-				SQL.getComments(postId, res -> {
+				SQL.getComments(postId, limit, offset, res -> {
 					if(res.succeeded()) {
 						JsonArray comments = new JsonArray();
 						

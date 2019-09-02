@@ -75,10 +75,11 @@ public class SQL {
 	 * Queries for all public posts
 	 * @param categoryCode the post category to search (null for all)
 	 * @param limit the amount of posts to return. Specify 0 to return all posts
+	 * @param offset the offset of posts retrieved
 	 * @param hdlr the callback for this query
 	 * @since 2.0
 	 */
-	public static void publicPosts(String categoryCode, int limit, Handler<AsyncResult<ResultSet>> hdlr) {
+	public static void publicPosts(String categoryCode, int limit, int offset, Handler<AsyncResult<ResultSet>> hdlr) {
 		Database.client().queryWithParams(
 			"SELECT\n" + 
 			"	post_name AS name,\n" + 
@@ -98,7 +99,8 @@ public class SQL {
 			"JOIN categories ON posts.post_category = categories.id\n" + 
 			"WHERE post_category > -1 AND category_code "+(categoryCode==null?"!= ? AND post_sticky < 1":"= ?")+"\n" +
 			"ORDER BY "+(categoryCode==null?"":"post_sticky DESC, ")+"post_bump DESC" + 
-			(limit > 0 ? "\nLIMIT "+limit : ""),
+			(limit > 0 ? "\nLIMIT "+limit : "") + 
+			(offset > 0 ? "\nOFFSET "+offset : ""),
 			new JsonArray().add(categoryCode == null ? "" : categoryCode),
 			hdlr
 		);
@@ -134,10 +136,12 @@ public class SQL {
 	/**
 	 * Queries for all comments on the specified post ID
 	 * @param postId the post ID
+	 * @param limit the amount of comments to return
+	 * @param offset the offset of comments to return
 	 * @param hdlr the callback for this query
 	 * @since 1.0
 	 */
-	public static void getComments(String postId, Handler<AsyncResult<ResultSet>> hdlr) {
+	public static void getComments(String postId, int limit, int offset, Handler<AsyncResult<ResultSet>> hdlr) {
 		Database.client().queryWithParams(
 			"SELECT comment_name AS name,\n" + 
 			"       comments.id,\n" + 
@@ -154,7 +158,9 @@ public class SQL {
 			"FROM comments\n" + 
 			"JOIN ranks ON comments.comment_poster_rank = ranks.id\n" + 
 			"WHERE post_id = ?" + 
-			"ORDER BY comments.id ASC",
+			"ORDER BY comments.id ASC" + 
+			(limit > 0 ? "\nLIMIT "+limit : "") + 
+			(offset > 0 ? "\nOFFSET "+offset : ""),
 			new JsonArray().add(postId),
 			hdlr
 		);
