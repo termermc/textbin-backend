@@ -38,7 +38,10 @@ For routes requiring a logged in user, the following will be returned if the min
 ## Post Routes
 GET `/public_posts` - Fetches public posts organized by last bump (descending)
 
-* Minimum rank required: 0
+ * Minimum rank required: 0
+ * Parameters:
+    * limit (int) (optional) - The amount of posts to retrieve
+ 	 * offset (int) (optional) - The offset of posts returned
  * Output:
     * posts (array)
         * name (string) - Post name/title
@@ -53,6 +56,8 @@ GET `/public_posts` - Fetches public posts organized by last bump (descending)
 GET `/latest_posts` - Fetches public posts organized by latest (descending)
 
  * Minimum rank required: 0
+ * Parameters:
+     * limit (int) (optional) - The amount of posts to retrieve
  * Output:
     * status (string) - The response status. success|error
     * posts (array)
@@ -98,6 +103,28 @@ POST `/post` - Creates a new post
 GET `/latest_comments` - Fetches comments on public posts organized by latest (descending)
 
  * Minimum rank required: 0
+ * Output:
+     * id (int) - The comment ID/number
+     * post_id (string) - The ten character ID of the post this comment is on
+     * name (string) - The poster name
+     * text (string) - The comment content/text
+     * date (string) - Creation date in MM/DD/YYYY format
+     * time (string) - Creation time in HH:MM format
+     * poster_rank (int) - The rank ID of the poster
+     * ban_text (string) - The ban text to be displayed on the comment (null if none)
+     * category (int) - The ID of the category where this comment was posted
+     * catrgory_code (string) - The 1-4 character ID of the category where this comment was posted
+     * rank_name (string) - The name of this poster's rank
+     * rank_flare (string) - The rank flare to be displayed alongside the poster's name (null if none)
+     * you (bool) - Whether this comment was posted by your IP address
+
+GET `/comments` - Fetches comments on a post
+
+ * Minimum rank required: 0
+ * Parameters:
+ 	 * post_id (string) - The post's ten character ID
+ 	 * limit (int) (optional) - The amount of comments to retrieve
+ 	 * offset (int) (optional) - The offset of comments returned
  * Output:
      * id (int) - The comment ID/number
      * post_id (string) - The ten character ID of the post this comment is on
