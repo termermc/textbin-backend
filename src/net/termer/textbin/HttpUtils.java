@@ -28,7 +28,7 @@ public class HttpUtils {
 	public static void api(RoutingContext r) {
 		r.response().putHeader("Content-Type", "application/json");
 		r.response().putHeader("Access-Control-Allow-Origin",
-				Module.config().frontend_host.equals("*") ? r.request().host() : Module.config().frontend_host);
+				Module.config().frontend_host.equals("*") ? r.request().getHeader("Origin") : Module.config().frontend_host);
 		r.response().putHeader("Access-Control-Allow-Credentials", "true");
 	}
 	/**
