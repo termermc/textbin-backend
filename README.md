@@ -1,5 +1,5 @@
 # textbin-backend
-Anonymous temporary text hosting site (backend).
+Anonymous text board engine and text hosting site (backend).
 Provides an API for the frontend and connects to a PostgreSQL server to store and retrieve data.
 
 # Dependencies
@@ -41,7 +41,7 @@ While most fields in TextBin's configuration file are fairly self-explanatory, y
 This software uses several classes for encryption that are listed below, along with their copyright notices.
 
 ```
-Java implementation of the UNIX crypt command
+Java implementation of the UNIX crypt command (for classic tripcodes)
 Copyright (c) 1996 Eric Young, (eay@mincom.oz.au)
 All rights reserved.
 ```
