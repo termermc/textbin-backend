@@ -458,7 +458,7 @@ public class SQL {
 			"JOIN ranks ON comments.comment_poster_rank = ranks.id\n" + 
 			"JOIN posts ON comments.post_id = posts.post_id\n" + 
 			"JOIN categories ON post_category = categories.id\n" + 
-			"WHERE post_category > -1\n" + 
+			"WHERE post_category > -1 AND comment_poster_ban IS NULL\n" + 
 			"ORDER BY id DESC" + 
 			(limit > 0 ? "\nLIMIT "+limit : ""),
 			hdlr
