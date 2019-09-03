@@ -8,6 +8,8 @@ All requests must be sent with both an `Origin` and a `Host` header.
 
 `Host` must be the host of the API you're hitting. If the API is located at `https://textbin.termer.net/`, then your `Host` header must be `textbin.termer.net`. As is with `Origin`, you must include the API port if it's non-standard.
 
+Note that these headers are already sent by JS fetch if the `credentials` option is set to `include`.
+
 ## Cookies
 For authentication, be sure to send the `vertx-web.session` cookie that is sent along with API responses, specifically after sucessfully using the `/auth` route.
 
@@ -34,6 +36,8 @@ For routes requiring a logged in user, the following will be returned if the min
 }
 ```
 
+## Parameters
+Parameters are sent via the HTTP query params, not by headers. Keep this in mind when you are writing a client.
 
 ## Post Routes
 GET `/public_posts` - Fetches public posts organized by last bump (descending)
