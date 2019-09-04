@@ -86,42 +86,55 @@ public class PostReplyRoute implements Handler<RoutingContext> {
 							HttpUtils.apiError(r, "bump");
 							cb.end();
 						} else {
-							comment = Str.truncate(comment, 1000);
-							// Get date and time
-							String date = Module.date();
-							String time = Module.time();
+							short kb = 1024;
+							int mb = 1024*kb;
 							
+							// Check if comment is less than half a MB long
 							try {
-								// Hash IP
-								String ip = HttpUtils.ip(r);
-								
-								// Resolve trip
-								String trip = null;
-								if(name.contains("#")) {
-									if(Module.config().trip_strategy.equals("secure")) {
-										trip = TripGen.secure(name);
-									} else if(Module.config().trip_strategy.equals("classic-secure")) {
-										trip = TripGen.classic(name, true);
-									} else {
-										trip = TripGen.classic(name, false);
+								if(comment.getBytes("UTF-8").length > 0.5*mb) {
+									HttpUtils.apiError(r, "Comment must be less than half a megabyte long");
+									cb.end();
+								} else {
+									// Get date and time
+									String date = Module.date();
+									String time = Module.time();
+									
+									try {
+										// Hash IP
+										String ip = HttpUtils.ip(r);
+										
+										// Resolve trip
+										String trip = null;
+										if(name.contains("#")) {
+											if(Module.config().trip_strategy.equals("secure")) {
+												trip = TripGen.secure(name);
+											} else if(Module.config().trip_strategy.equals("classic-secure")) {
+												trip = TripGen.classic(name, true);
+											} else {
+												trip = TripGen.classic(name, false);
+											}
+											name = name.split("#")[0];
+										}
+										
+										// Put data for next callback
+										cb.data()
+											.put("name", name)
+											.put("comment", comment)
+											.put("date", date)
+											.put("time", time)
+											.put("ip", ip)
+											.put("email", email)
+											.put("trip", trip);
+										
+										// Proceed to query
+										cb.next();
+									} catch (NoSuchAlgorithmException | UnsupportedEncodingException | CharacterCodingException e) {
+										cb.fail(e);
 									}
-									name = name.split("#")[0];
 								}
-								
-								// Put data for next callback
-								cb.data()
-									.put("name", name)
-									.put("comment", comment)
-									.put("date", date)
-									.put("time", time)
-									.put("ip", ip)
-									.put("email", email)
-									.put("trip", trip);
-								
-								// Proceed to query
-								cb.next();
-							} catch (NoSuchAlgorithmException | UnsupportedEncodingException | CharacterCodingException e) {
-								cb.fail(e);
+							} catch (UnsupportedEncodingException ex) {
+								// I never expect this to trigger
+								ex.printStackTrace();
 							}
 						}
 					} else {
